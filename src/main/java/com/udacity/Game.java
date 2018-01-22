@@ -141,6 +141,7 @@ public class Game {
 
 
     /**
+	 * @author Michal Bodzek
      * Checks if the game has ended either because a player has won, or if the game has ended as a tie.
      * If game hasn't ended the return string has to be "None",
      * If the game ends as tie, the return string has to be "Tie",
@@ -149,8 +150,75 @@ public class Game {
      * @return String indicating the outcome of the game: "X wins" or "O wins" or "Tie" or "None"
      */
     public String checkGameWinner(char [][]grid){
+        String result;
+        String winsO = "ooo";
+        String winsX = "xxx";
+        String testVertical;
+        String testHorizontal;
+        String testDiagonal;
+
+        for(int i = 0; i < 3; i++) {
+            // For Win 3 x's or o's in column
+            testVertical = "" + grid[i][0] + grid[i][1] + grid[i][2];
+            result = isWinner(testVertical, winsO, winsX);
+            if (!result.equals("None")) {
+                return result;
+            }
+            // For Win 3 x's or o's in row
+            testHorizontal = "" + grid[0][i] + grid[1][i] + grid[2][i];
+            result = isWinner(testHorizontal, winsO, winsX);
+            if (!result.equals("None")) {
+                return result;
+            }
+        }
+        // For Win 3 x's or o's in diagonal
+        testDiagonal = "" + grid[0][0] + grid[1][1] + grid[2][2];
+        result = isWinner(testDiagonal, winsO, winsX);
+        if (!result.equals("None")) {
+            return result;
+        }
+        // For Win 3 x's or o's in diagonal
+        testDiagonal = "" + grid[0][2] + grid[1][1] + grid[2][0];
+        result = isWinner(testDiagonal, winsO, winsX);
+        if (!result.equals("None")) {
+            return result;
+        }
+        // For Tie
+        String hyphen = "-";
+        boolean foundEmpty = false;
+        for(int i = 0; i < 3; i++) {
+            if(foundEmpty) {
+                break;
+            }
+            for(int j = 0; j < 3; j++) {
+                String fieldUnderTest = "" + grid[i][j];
+                if(fieldUnderTest.equals(hyphen)) {
+                    foundEmpty = true;
+                    break;
+                }
+                if(i == 2 && j == 2) {
+                    return "Tie";
+                }
+            }
+        }
+        return result;
+    }
+	
+	/**
+	 * @author Michal Bodzek
+     * Checks if  String under test is winning String or not (private method)
+     * @param test String under test is Winner in row, column, and diagonal
+	 * @param winsO String which is winning for O
+	 * @param winsX String which is winning for X
+     * @return String indicating the outcome of the game: "X wins" or "O wins" or "None" and not "Tie"
+     */
+    private String isWinner(String test, String winsO, String winsX) {
         String result = "None";
-        //Student code goes here ...
+        if(test.equals(winsO)) {
+            result = "O wins";
+        } else if (test.equals(winsX)) {
+            result = "X wins";
+        }
         return result;
     }
 
